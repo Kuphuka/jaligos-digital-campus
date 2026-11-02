@@ -5,6 +5,7 @@ import { CheckCircle2, Loader2, Upload } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { branches } from "@/lib/data";
 import { formatCoursePrice, getCoursePrice } from "@/lib/course-prices";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 import { prepareApplicationUploads, submitApplication } from "@/app/register/actions";
 
 export type CourseOption = { id: string; title: string; level: string | null; price: number | null };
@@ -175,6 +176,21 @@ export default function RegisterForm({ courses }: { courses: CourseOption[] }) {
             </button>
           </form>
         )}
+        <p className="border-t border-slate-100 px-6 py-5 text-center text-sm leading-relaxed text-slate-600 sm:px-8">
+          Need help? Call/WhatsApp us on{" "}
+          {schoolContacts.map((contact, index) => (
+            <span key={contact.number}>
+              {index > 0 && (index === schoolContacts.length - 1 ? ", or " : ", ")}
+              <a href={`tel:${contact.tel}`} className="font-semibold text-navy underline decoration-gold underline-offset-2 hover:text-gold-dark">
+                {contact.number}
+              </a>
+            </span>
+          ))}
+          . Or email us at{" "}
+          <a href={`mailto:${schoolEmail}`} className="break-all font-semibold text-navy underline decoration-gold underline-offset-2 hover:text-gold-dark">
+            {schoolEmail}
+          </a>.
+        </p>
       </div>
     </main>
   );

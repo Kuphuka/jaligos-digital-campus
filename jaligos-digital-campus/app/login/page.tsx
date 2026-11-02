@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 import { homeFor } from "@/lib/roles";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 
 const field =
   "w-full rounded border border-gray-300 px-4 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -109,6 +110,24 @@ export default function Login() {
             <Link href="/register" className="font-semibold text-action hover:underline">Apply Now</Link>
           </p>
         </form>
+        <details className="mx-6 mb-6 rounded-lg border border-gold/40 bg-navy/[0.03] sm:mx-8">
+          <summary className="cursor-pointer px-4 py-3 text-center text-sm font-semibold text-navy hover:text-gold-dark">
+            Need help? <span className="text-gold-dark underline underline-offset-2">Contact Support</span>
+          </summary>
+          <div className="space-y-3 border-t border-gold/20 px-4 py-4 text-center text-sm">
+            <p className="text-slate-600">Call or WhatsApp us:</p>
+            <div className="flex flex-wrap justify-center gap-x-3 gap-y-2">
+              {schoolContacts.map((contact) => (
+                <a key={contact.number} href={`tel:${contact.tel}`} className="font-semibold text-navy underline decoration-gold underline-offset-2 hover:text-gold-dark">
+                  {contact.number}
+                </a>
+              ))}
+            </div>
+            <a href={`mailto:${schoolEmail}`} className="inline-block max-w-full break-all font-semibold text-navy underline decoration-gold underline-offset-2 hover:text-gold-dark">
+              {schoolEmail}
+            </a>
+          </div>
+        </details>
       </div>
     </main>
   );

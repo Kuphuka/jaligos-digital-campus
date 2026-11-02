@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import Logo from "./Logo";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 
 export default function Footer() {
   return (
@@ -36,9 +37,25 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 font-heading text-sm uppercase tracking-wider text-gold">Talk to Us</h4>
           <ul className="space-y-3 text-sm">
-            <li className="flex items-center gap-2"><Phone size={16} className="text-gold" /> +27 00 000 0000</li>
-            <li className="flex items-center gap-2"><MessageCircle size={16} className="text-gold" /> WhatsApp: +27 00 000 0000</li>
-            <li className="flex items-center gap-2"><Mail size={16} className="text-gold" /> info@jaligos.co.za</li>
+            {schoolContacts.map((contact) => (
+              <li key={contact.number} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <Phone size={16} className="text-gold" />
+                <a href={`tel:${contact.tel}`} className="font-semibold text-white hover:text-gold">{contact.number}</a>
+                <a
+                  href={`https://wa.me/${contact.whatsapp}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`WhatsApp ${contact.number}`}
+                  className="inline-flex items-center gap-1 text-slate-400 hover:text-gold"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
+              </li>
+            ))}
+            <li className="flex min-w-0 items-center gap-2">
+              <Mail size={16} className="shrink-0 text-gold" />
+              <a href={`mailto:${schoolEmail}`} className="break-all hover:text-gold">{schoolEmail}</a>
+            </li>
           </ul>
         </div>
       </div>

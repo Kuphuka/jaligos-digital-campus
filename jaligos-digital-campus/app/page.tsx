@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle, Phone } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 import { blackFridayCoursePrices, formatCoursePrice } from "@/lib/course-prices";
 
 const courseCards = [
@@ -113,6 +114,40 @@ export default function Home() {
                 Apply for a course <ArrowRight size={17} />
               </Link>
             </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="contact-heading" className="bg-navy px-6 py-14 sm:py-16">
+          <div className="mx-auto max-w-7xl">
+            <div className="text-center">
+              <h2 id="contact-heading" className="font-heading text-3xl font-bold text-gold sm:text-4xl">Call or WhatsApp Jaligos</h2>
+              <p className="mt-3 text-sm text-white/75 sm:text-base">Our team is ready to help with course and registration questions.</p>
+            </div>
+            <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
+              {schoolContacts.map((contact) => (
+                <div key={contact.number} className="rounded-lg border border-gold/25 bg-white/5 p-5 text-center">
+                  <a href={`tel:${contact.tel}`} className="font-heading text-xl font-bold text-white transition hover:text-gold">
+                    <Phone size={18} className="mr-2 inline text-gold" aria-hidden="true" />
+                    {contact.number}
+                  </a>
+                  <a
+                    href={`https://wa.me/${contact.whatsapp}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full border border-gold/40 px-4 py-1.5 text-sm font-semibold text-gold transition hover:bg-gold hover:text-navy"
+                  >
+                    <MessageCircle size={15} aria-hidden="true" />
+                    WhatsApp us
+                  </a>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 break-all text-center text-sm text-white/80">
+              Email us at{" "}
+              <a href={`mailto:${schoolEmail}`} className="font-semibold text-gold underline underline-offset-2 hover:text-white">
+                {schoolEmail}
+              </a>
+            </p>
           </div>
         </section>
 

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronDown, Menu, Monitor, X } from "lucide-react";
+import { ChevronDown, Mail, Menu, Monitor, Phone, X } from "lucide-react";
 import Logo from "./Logo";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 
 const navItems = [
   { label: "About Us", links: ["Our Story", "Accreditation", "Why Jaligos"] },
@@ -19,16 +20,22 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 shadow-sm">
       {/* Top bar */}
-      <div className="hidden bg-gray-100 text-xs text-slate-600 md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
-          <div className="flex gap-6">
-            <Link href="#" className="hover:text-navy">Payments and Fees</Link>
-            <Link href="#" className="hover:text-navy">Assist</Link>
+      <div className="bg-navy text-xs text-white/80">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-2 sm:justify-between">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <a href={`tel:${schoolContacts[0].tel}`} className="inline-flex items-center gap-1.5 font-semibold text-gold hover:text-white">
+              <Phone size={13} /> {schoolContacts[0].number}
+            </a>
+            <a href={`mailto:${schoolEmail}`} className="inline-flex min-w-0 items-center gap-1.5 break-all text-white/85 hover:text-gold sm:break-normal">
+              <Mail size={13} /> {schoolEmail}
+            </a>
+            <Link href="#" className="hidden hover:text-gold sm:inline">Payments and Fees</Link>
+            <Link href="#" className="hidden hover:text-gold sm:inline">Assist</Link>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="/login" className="hover:text-navy">Current Students</Link>
-            <Link href="/login" className="hover:text-navy">Staff Portal</Link>
-            <Link href="#" className="flex items-center gap-1 font-semibold text-navy hover:text-gold-dark">
+          <div className="hidden items-center gap-6 md:flex">
+            <Link href="/login" className="hover:text-gold">Current Students</Link>
+            <Link href="/login" className="hover:text-gold">Staff Portal</Link>
+            <Link href="#" className="flex items-center gap-1 font-semibold text-gold hover:text-white">
               <Monitor size={14} /> Study Online
             </Link>
           </div>

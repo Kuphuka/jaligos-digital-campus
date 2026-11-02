@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
+import { schoolContacts, schoolEmail } from "@/lib/contact";
 
 type ChatMessage = { from: "visitor" | "bot"; text: string };
 
@@ -9,7 +10,10 @@ export default function ChatBot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { from: "bot", text: "Hi! How can we help you today?" },
+    {
+      from: "bot",
+      text: `Hi! How can we help you today? WhatsApp us on ${schoolContacts[0].number} or email ${schoolEmail}.`,
+    },
   ]);
   const [responding, setResponding] = useState(false);
 
@@ -31,11 +35,11 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[60]">
+    <div className="fixed bottom-3 right-3 z-[60] sm:bottom-5 sm:right-5">
       {open && (
         <section
           aria-label="Jaligos chat"
-          className="mb-3 flex h-[min(28rem,calc(100vh-7rem))] w-[min(22rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border border-gold/40 bg-white shadow-2xl"
+          className="mb-3 flex h-[min(28rem,calc(100vh-6rem))] w-[min(22rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-gold/40 bg-white shadow-2xl"
         >
           <header className="flex items-center justify-between bg-navy px-4 py-3 text-white">
             <div>
@@ -50,7 +54,7 @@ export default function ChatBot() {
             {messages.map((message, index) => (
               <p
                 key={`${index}-${message.from}`}
-                className={`max-w-[85%] rounded-xl px-3 py-2 text-sm ${
+                className={`max-w-[90%] break-words rounded-xl px-3 py-2 text-sm ${
                   message.from === "visitor"
                     ? "ml-auto bg-navy text-white"
                     : "mr-auto border border-gold/30 bg-white text-navy"
