@@ -43,14 +43,14 @@ export default function ChatBot() {
         >
           <header className="flex items-center justify-between bg-navy px-4 py-3 text-white">
             <div>
-              <h2 className="font-serif text-lg font-bold text-gold">Jaligos Support</h2>
+              <h2 className="font-serif text-lg font-bold text-white">Jaligos Support</h2>
               <p className="text-xs text-white/75">We are happy to help</p>
             </div>
             <button type="button" onClick={() => setOpen(false)} aria-label="Close chat" className="rounded p-2 hover:bg-white/10">
               <X size={18} />
             </button>
           </header>
-          <div aria-live="polite" className="flex-1 space-y-3 overflow-y-auto bg-[#F8F9FA] p-4">
+          <div aria-live="polite" className="flex-1 space-y-3 overflow-y-auto bg-[#F5F3EE] p-4">
             {messages.map((message, index) => (
               <p
                 key={`${index}-${message.from}`}
@@ -77,7 +77,7 @@ export default function ChatBot() {
               type="submit"
               disabled={!input.trim() || responding}
               aria-label="Send message"
-              className="rounded-lg bg-gold p-2 text-navy hover:bg-gold-dark disabled:opacity-50"
+              className="rounded-lg bg-action p-2 text-white hover:bg-gold-dark disabled:opacity-50"
             >
               <Send size={18} />
             </button>
@@ -89,7 +89,7 @@ export default function ChatBot() {
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Close chat" : "Open chat"}
         aria-expanded={open}
-        className="ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold text-navy shadow-lg transition hover:bg-gold-dark focus:outline-none focus:ring-4 focus:ring-gold/40"
+        className="ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-action text-white shadow-lg transition hover:bg-gold-dark focus:outline-none focus:ring-4 focus:ring-action/40"
       >
         {open ? <X size={24} /> : <MessageCircle size={26} />}
       </button>

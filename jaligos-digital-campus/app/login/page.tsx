@@ -69,14 +69,14 @@ export default function Login() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+    <main className="flex min-h-screen items-center justify-center bg-[#F5F3EE] px-4">
       <div className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-lg">
         <div className="flex flex-col items-center bg-navy px-8 py-8">
           <Logo dark />
           <p className="mt-3 text-sm text-white/70">Digital Campus Login</p>
         </div>
         <form onSubmit={onSubmit} className="space-y-5 p-8">
-          {error && <p className="rounded bg-red-50 px-3 py-2 text-sm text-action">{error}</p>}
+          {error && <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
           <div>
             <label className="mb-1.5 block text-sm font-semibold text-navy">Email</label>
             <input
@@ -101,7 +101,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded bg-gold py-3 font-heading font-bold text-navy transition hover:bg-gold-dark disabled:opacity-70"
+            className="flex w-full items-center justify-center gap-2 rounded bg-action py-3 font-heading font-bold text-white transition hover:bg-gold-dark disabled:opacity-70"
           >
             {loading ? <><Loader2 size={16} className="animate-spin" /> Logging in...</> : "Log In"}
           </button>

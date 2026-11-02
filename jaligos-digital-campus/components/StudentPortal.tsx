@@ -63,8 +63,8 @@ export default function StudentPortal({ profile, courses, materials, results }: 
         
         {/* Hero Banner */}
         <div className="bg-navy rounded-2xl p-10 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gold opacity-10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-          <h1 className="text-4xl font-serif font-bold mb-3 text-gold">Welcome back, {profile.name?.split(' ')[0]}</h1>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-action opacity-10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+          <h1 className="text-4xl font-serif font-bold mb-3 text-white">Welcome back, {profile.name?.split(' ')[0]}</h1>
           <p className="text-gray-300 font-sans text-lg">Your academic journey continues here.</p>
           <p className="text-sm text-gray-400 mt-2 font-sans">Email: {profile.email}</p>
         </div>
@@ -79,7 +79,7 @@ export default function StudentPortal({ profile, courses, materials, results }: 
               <h2 className="text-2xl font-serif font-bold text-navy mb-6">Study Materials</h2>
               <div className="space-y-4">
                 {materials.length > 0 ? materials.map((mat) => (
-                  <div key={mat.id} className="flex justify-between items-center bg-[#F8F9FA] p-5 rounded-xl border border-gray-100 hover:border-gold transition-colors duration-300">
+                  <div key={mat.id} className="flex justify-between items-center bg-[#F5F3EE] p-5 rounded-xl border border-gray-100 hover:border-gold transition-colors duration-300">
                     <div>
                       <span className="font-heading font-bold text-navy block text-lg">{mat.title}</span>
                       <span className="text-xs text-gray-500 font-sans mt-1 block">By {mat.uploaded_by_name}</span>
@@ -110,8 +110,8 @@ export default function StudentPortal({ profile, courses, materials, results }: 
                   {courses.map((course) => <option key={course.id} value={course.id}>{course.title}</option>)}
                 </select>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-[#F8F9FA] hover:border-gold transition-all duration-300">
-                <input type="file" accept=".pdf,.doc,.docx" onChange={handleUploadAssignment} disabled={uploading || !courseId} className="mx-auto text-sm text-gray-500 file:mr-6 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-heading file:font-bold file:bg-gold file:text-navy hover:file:bg-gold-dark file:transition-colors file:cursor-pointer" />
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-[#F5F3EE] hover:border-gold transition-all duration-300">
+                <input type="file" accept=".pdf,.doc,.docx" onChange={handleUploadAssignment} disabled={uploading || !courseId} className="mx-auto text-sm text-gray-500 file:mr-6 file:py-3 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-heading file:font-bold file:bg-action file:text-white hover:file:bg-gold-dark file:transition-colors file:cursor-pointer" />
               </div>
               {uploading && <p className="text-center text-sm text-green-600 mt-4 font-heading font-semibold">Uploading...</p>}
               {uploadMessage && <p role="status" className={`mt-4 rounded-lg px-4 py-3 text-sm ${uploadMessage.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>{uploadMessage.text}</p>}
@@ -124,7 +124,7 @@ export default function StudentPortal({ profile, courses, materials, results }: 
               <h2 className="text-2xl font-serif font-bold text-navy mb-6">My Results</h2>
               <div className="space-y-4">
                 {results.length ? results.map((result) => (
-                  <div key={result.id} className="rounded-xl border border-gray-100 bg-[#F8F9FA] p-5">
+                  <div key={result.id} className="rounded-xl border border-gray-100 bg-[#F5F3EE] p-5">
                     <p className="font-heading font-bold text-navy">{result.course}</p>
                     <p className="mt-1 font-sans text-sm text-gray-500">
                       Mark: <span className="text-lg font-bold text-green-700">{result.mark}%</span>

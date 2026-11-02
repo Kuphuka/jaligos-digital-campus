@@ -139,11 +139,11 @@ export default function AdminDashboard({
       <div className="max-w-7xl mx-auto space-y-6">
         <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="border-b border-gray-200 px-6 py-4">
-            <h2 className="font-serif text-xl font-bold text-[#0B1B3D]">Staff Management</h2>
+            <h2 className="font-serif text-xl font-bold text-navy">Staff Management</h2>
             <p className="mt-1 text-sm text-gray-500">Create lecturer accounts, assign courses, and manage access.</p>
           </div>
           <form onSubmit={handleCreateLecturer} className="grid gap-4 p-6 md:grid-cols-[1fr_1fr_auto] md:items-end">
-            <label className="block text-sm font-semibold text-[#0B1B3D]">
+            <label className="block text-sm font-semibold text-navy">
               Lecturer Full Name
               <input
                 required
@@ -154,7 +154,7 @@ export default function AdminDashboard({
                 placeholder="First name and surname"
               />
             </label>
-            <label className="block text-sm font-semibold text-[#0B1B3D]">
+            <label className="block text-sm font-semibold text-navy">
               Assigned Course
               <select
                 required
@@ -169,12 +169,12 @@ export default function AdminDashboard({
             <button
               type="submit"
               disabled={creatingLecturer || courses.length === 0}
-              className="rounded bg-[#FDB913] px-5 py-2.5 font-bold text-[#0B1B3D] disabled:opacity-50"
+              className="rounded bg-action px-5 py-2.5 font-bold text-white transition hover:bg-gold-dark disabled:opacity-50"
             >
               {creatingLecturer ? "Creating..." : "Create Lecturer"}
             </button>
           </form>
-          {staffMessage && <p role="status" className="px-6 pb-5 text-sm text-[#0B1B3D]">{staffMessage}</p>}
+          {staffMessage && <p role="status" className="px-6 pb-5 text-sm text-navy">{staffMessage}</p>}
           <div className="overflow-x-auto border-t">
             <table className="w-full min-w-[700px] text-left text-sm">
               <thead className="bg-gray-50 text-gray-600">
@@ -191,7 +191,7 @@ export default function AdminDashboard({
                   <tr><td colSpan={5} className="p-8 text-center text-gray-500">No lecturers have been created.</td></tr>
                 ) : lecturers.map((lecturer) => (
                   <tr key={lecturer.email}>
-                    <td className="p-4 font-medium text-[#0B1B3D]">{lecturer.name}</td>
+                    <td className="p-4 font-medium text-navy">{lecturer.name}</td>
                     <td className="p-4">{lecturer.email}</td>
                     <td className="p-4">{lecturer.courses.join(", ") || "No course assigned"}</td>
                     <td className="p-4 capitalize">{lecturer.status}</td>
@@ -200,7 +200,7 @@ export default function AdminDashboard({
                         type="button"
                         onClick={() => void handleLecturerStatus(lecturer)}
                         disabled={updatingLecturer === lecturer.email}
-                        className="rounded border border-[#0B1B3D] px-3 py-1.5 text-xs font-bold text-[#0B1B3D] disabled:opacity-50"
+                        className="rounded border border-navy px-3 py-1.5 text-xs font-bold text-navy disabled:opacity-50"
                       >
                         {updatingLecturer === lecturer.email ? "Updating..." : lecturer.status === "suspended" ? "Reactivate" : "Suspend"}
                       </button>
@@ -214,10 +214,10 @@ export default function AdminDashboard({
 
         <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="border-b border-gray-200 px-6 py-4">
-            <h2 className="font-serif text-xl font-bold text-[#0B1B3D]">Pending Results for Release</h2>
+            <h2 className="font-serif text-xl font-bold text-navy">Pending Results for Release</h2>
             <p className="mt-1 text-sm text-gray-500">Review marks submitted by lecturers before publishing them to students.</p>
           </div>
-          {resultMessage && <p role="status" className="px-6 pt-4 text-sm text-[#0B1B3D]">{resultMessage}</p>}
+          {resultMessage && <p role="status" className="px-6 pt-4 text-sm text-navy">{resultMessage}</p>}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead className="bg-gray-50 text-gray-600">
@@ -233,15 +233,15 @@ export default function AdminDashboard({
                   <tr><td colSpan={4} className="p-8 text-center text-gray-500">There are no pending results.</td></tr>
                 ) : pendingResults.map((result) => (
                   <tr key={result.id}>
-                    <td className="p-4 font-medium text-[#0B1B3D]">{result.student_email}</td>
+                    <td className="p-4 font-medium text-navy">{result.student_email}</td>
                     <td className="p-4">{result.course}</td>
-                    <td className="p-4 font-bold text-[#0B1B3D]">{result.mark}%</td>
+                    <td className="p-4 font-bold text-navy">{result.mark}%</td>
                     <td className="p-4">
                       <button
                         type="button"
                         onClick={() => void handleRelease(result.id)}
                         disabled={releasingId === result.id}
-                        className="rounded bg-[#0B1B3D] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#1a3263] disabled:opacity-50"
+                        className="rounded bg-navy px-4 py-2 text-xs font-bold text-white transition hover:bg-navy-light disabled:opacity-50"
                       >
                         {releasingId === result.id ? "Releasing..." : "Release to Student"}
                       </button>
@@ -254,7 +254,7 @@ export default function AdminDashboard({
         </section>
 
         <div>
-          <h1 className="text-3xl font-bold text-[#0B1B3D]">Pending Applications</h1>
+          <h1 className="text-3xl font-bold text-navy">Pending Applications</h1>
           <p className="text-gray-500 mt-1">Review and approve new student registrations.</p>
         </div>
 
@@ -277,7 +277,7 @@ export default function AdminDashboard({
                 applications.map((app) => (
                   <tr key={app.id} className="hover:bg-gray-50">
                     <td className="p-4 text-gray-500">{app.created_at ? new Date(app.created_at).toLocaleDateString() : "—"}</td>
-                    <td className="p-4 font-medium text-[#0B1B3D]">
+                    <td className="p-4 font-medium text-navy">
                       {app.first_name} {app.surname}
                       <br/>
                       <span className="text-xs text-gray-400 font-normal">{app.email}</span>
@@ -296,7 +296,7 @@ export default function AdminDashboard({
                       <button 
                         onClick={() => handleApprove(app)}
                         disabled={loadingId === app.id}
-                        className="bg-[#0B1B3D] text-white px-4 py-2 rounded text-xs font-bold hover:bg-opacity-90 transition disabled:opacity-50"
+                        className="bg-navy text-white px-4 py-2 rounded text-xs font-bold hover:bg-navy-light transition disabled:opacity-50"
                       >
                         {loadingId === app.id ? "Approving..." : "Approve & Enroll"}
                       </button>

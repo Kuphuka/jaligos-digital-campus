@@ -174,7 +174,7 @@ export default function StaffPortal({
           </label>
         </div>
         {markMessage && (
-          <p role="status" className={`mx-6 mt-4 rounded px-4 py-3 text-sm ${markMessage.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-action"}`}>
+          <p role="status" className={`mx-6 mt-4 rounded px-4 py-3 text-sm ${markMessage.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
             {markMessage.text}
           </p>
         )}
@@ -270,7 +270,7 @@ export default function StaffPortal({
         </div>
         <form onSubmit={upload} className="space-y-4 p-6">
           {message && (
-            <p className={`rounded px-4 py-3 text-sm ${message.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-action"}`}>
+            <p className={`rounded px-4 py-3 text-sm ${message.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
               {message.text}
             </p>
           )}
@@ -299,7 +299,7 @@ export default function StaffPortal({
           <button
             type="submit"
             disabled={!title || !file || uploading}
-            className="inline-flex items-center gap-2 rounded bg-gold px-6 py-2.5 font-heading font-bold text-navy transition hover:bg-gold-dark disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded bg-action px-6 py-2.5 font-heading font-bold text-white transition hover:bg-gold-dark disabled:cursor-not-allowed disabled:opacity-50"
           >
             {uploading && <Loader2 size={16} className="animate-spin" />} Upload
           </button>
@@ -327,7 +327,7 @@ export default function StaffPortal({
           <h2 className="font-heading text-xl text-navy">Student Submissions</h2>
           <p className="mt-1 text-sm text-slate-500">Submissions and grading are filtered to the selected course.</p>
         </div>
-        {submissionMessage && <p role="status" className="mx-6 mt-4 rounded bg-red-50 px-4 py-3 text-sm text-action">{submissionMessage}</p>}
+        {submissionMessage && <p role="status" className="mx-6 mt-4 rounded bg-red-50 px-4 py-3 text-sm text-red-700">{submissionMessage}</p>}
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="bg-gray-50 text-xs uppercase tracking-wide text-slate-500">

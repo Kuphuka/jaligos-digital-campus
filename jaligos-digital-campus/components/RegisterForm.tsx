@@ -90,10 +90,10 @@ export default function RegisterForm({ courses }: { courses: CourseOption[] }) {
   }
 
   return (
-    <main className="bg-gray-100 px-4 py-14">
+    <main className="bg-[#F5F3EE] px-4 py-14">
       <div className="mx-auto max-w-3xl overflow-hidden rounded-xl bg-white shadow-md">
         <div className="bg-navy px-8 py-6">
-          <h1 className="font-heading text-2xl text-white">Apply to <span className="text-gold">Jaligos</span></h1>
+          <h1 className="font-heading text-2xl text-white">Apply to <span className="text-white">Jaligos</span></h1>
           <p className="mt-1 text-sm text-white/70">Complete the form below and our admissions team will be in touch.</p>
         </div>
 
@@ -107,7 +107,7 @@ export default function RegisterForm({ courses }: { courses: CourseOption[] }) {
           </div>
         ) : (
           <form onSubmit={onSubmit} className="space-y-8 p-8">
-            {error && <p className="rounded bg-red-50 px-4 py-3 text-sm text-action">{error}</p>}
+            {error && <p className="rounded bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
 
             <section>
               <h2 className="mb-4 border-b pb-2 font-heading text-lg text-navy">Personal Details</h2>
@@ -170,7 +170,7 @@ export default function RegisterForm({ courses }: { courses: CourseOption[] }) {
             <button
               type="submit"
               disabled={submitting || courses.length === 0}
-              className="flex w-full items-center justify-center gap-2 rounded bg-action py-3.5 font-heading font-bold text-white transition hover:bg-action-dark disabled:opacity-70"
+              className="flex w-full items-center justify-center gap-2 rounded bg-action py-3.5 font-heading font-bold text-white transition hover:bg-gold-dark disabled:opacity-70"
             >
               {submitting ? <><Loader2 size={18} className="animate-spin" /> Submitting...</> : "Submit Application"}
             </button>

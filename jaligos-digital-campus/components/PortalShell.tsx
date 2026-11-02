@@ -29,7 +29,7 @@ export default function PortalShell({ children, profile, title, subtitle }: Port
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
+    <div className="min-h-screen bg-[#F5F3EE] flex flex-col">
       {/* Luxury Top Navigation */}
       <header className="bg-navy text-white py-5 px-8 flex justify-between items-center shadow-[0_4px_20px_rgba(0,0,0,0.1)] sticky top-0 z-50">
         <div className="flex items-center gap-6">
@@ -43,7 +43,7 @@ export default function PortalShell({ children, profile, title, subtitle }: Port
         </div>
         <div className="flex items-center gap-6">
           <span className="text-sm hidden md:block text-gray-300 font-sans">{profile?.email || "admin@jaligos.co.za"}</span>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark text-navy flex items-center justify-center font-heading font-bold text-sm shadow-lg">
+          <div className="w-10 h-10 rounded-full bg-gold text-navy flex items-center justify-center font-heading font-bold text-sm shadow-lg">
             {initials}
           </div>
           <button onClick={handleLogout} className="text-sm font-heading font-semibold text-gray-300 hover:text-gold transition-colors duration-300">
