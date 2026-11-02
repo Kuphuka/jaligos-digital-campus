@@ -3,6 +3,8 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PromoBanner from "@/components/PromoBanner";
+import { blackFridayCoursePrices, formatCoursePrice } from "@/lib/course-prices";
 
 const courseCards = [
   {
@@ -67,6 +69,8 @@ export default function Home() {
           </div>
         </section>
 
+        <PromoBanner />
+
         {/* Courses */}
         <section id="courses" className="mx-auto max-w-7xl px-6 py-20">
           <h2 className="text-center font-heading text-3xl text-navy sm:text-4xl">What would you like to study?</h2>
@@ -86,6 +90,29 @@ export default function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Black Friday prices */}
+        <section className="bg-gray-50 px-6 py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="text-center font-heading text-3xl text-navy sm:text-4xl">Black Friday Course Prices</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-600 sm:text-base">
+              Choose from our featured qualifications and apply online to secure your place.
+            </p>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {blackFridayCoursePrices.map((course) => (
+                <div key={course.title} className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                  <h3 className="font-heading text-sm font-semibold text-navy sm:text-base">{course.title}</h3>
+                  <span className="shrink-0 font-heading text-lg font-extrabold text-gold-dark">{formatCoursePrice(course.price)}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link href="/register" className="inline-flex items-center gap-2 rounded bg-navy px-6 py-3 font-heading font-bold text-white transition hover:bg-navy-light">
+                Apply for a course <ArrowRight size={17} />
+              </Link>
+            </div>
           </div>
         </section>
 

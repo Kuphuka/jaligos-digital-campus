@@ -4,9 +4,10 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, Upload } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { branches } from "@/lib/data";
+import { formatCoursePrice, getCoursePrice } from "@/lib/course-prices";
 import { prepareApplicationUploads, submitApplication } from "@/app/register/actions";
 
-export type CourseOption = { id: string; title: string; level: string | null };
+export type CourseOption = { id: string; title: string; level: string | null; price: number | null };
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const ALLOWED = ["application/pdf", "image/jpeg", "image/png"];
@@ -127,7 +128,14 @@ export default function RegisterForm({ courses }: { courses: CourseOption[] }) {
                     <option value="" disabled>{courses.length ? "Select a course" : "No courses available yet"}</option>
                     {Object.entries(groups).map(([level, items]) => (
                       <optgroup key={level} label={level}>
-                        {items.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                        {items.map((c) => {
+                          const price = getCoursePrice(c.title, c.level, c.price);
+                          return (
+                            <option key={c.id} value={c.id}>
+                              {c.title}{price == null ? "" : ` - ${formatCoursePrice(price)}`}
+                            </option>
+                          );
+                        })}
                       </optgroup>
                     ))}
                   </select>

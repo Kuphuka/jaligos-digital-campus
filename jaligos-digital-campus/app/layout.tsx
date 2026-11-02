@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import ChatBot from "@/components/ChatBot";
+import PromoBanner from "@/components/PromoBanner";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>
       <body>
+        <PromoBanner compact />
         {children}
         <ChatBot />
       </body>

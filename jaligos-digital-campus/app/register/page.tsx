@@ -8,13 +8,14 @@ export const dynamic = "force-dynamic";
 export default async function Register() {
   const { data } = await createAdminClient()
     .from("courses")
-    .select("id,title,level")
+    .select("id,title,level,price")
     .order("title");
 
   const courses: CourseOption[] = (data ?? []).map((c) => ({
     id: String(c.id),
     title: c.title as string,
     level: c.level == null ? null : String(c.level),
+    price: c.price == null ? null : Number(c.price),
   }));
 
   return (

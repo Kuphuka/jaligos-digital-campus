@@ -16,6 +16,8 @@ For lecturer course assignments and account suspension, also run `supabase/staff
 
 Then Storage -> Policies: delete any policies you created on the `documents` bucket. The website uses server-side access, so it doesn't need them.
 
+For the Black Friday 2026 course prices, run `supabase/black-friday-prices.sql` in the SQL Editor. Its title matches must correspond to the existing `courses.title` values.
+
 ## 2. Add your courses
 The registration dropdown reads the `courses` table. Add rows in the Table Editor (title, level, price), or use SQL
 (adjust to your column types):
