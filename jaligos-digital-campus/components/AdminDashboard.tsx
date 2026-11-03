@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Copy, X } from "lucide-react";
 import PortalShell from "./PortalShell";
-import { approveApplication, createAdmin, createLecturer, releaseResult, setLecturerStatus } from "@/app/admin/actions";
+import { approveApplication, createAdmin, createLecturer, releaseResult, resetAdminPassword, setLecturerStatus } from "@/app/admin/actions";
 
 export type PendingApplication = {
   id: string;
@@ -46,7 +46,14 @@ export default function AdminDashboard({
   const [adminName, setAdminName] = useState("");
   const [creatingAdmin, setCreatingAdmin] = useState(false);
   const [adminMessage, setAdminMessage] = useState<string | null>(null);
-  const [createdAdmin, setCreatedAdmin] = useState<{ name: string; email: string; password: string } | null>(null);
+  const [createdAdmin, setCreatedAdmin] = useState<{
+    name: string;
+    email: string;
+    password: string;
+    reset: boolean;
+  } | null>(null);
+  const [adminEmailForReset, setAdminEmailForReset] = useState("");
+  const [resettingAdmin, setResettingAdmin] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [staffMessage, setStaffMessage] = useState<string | null>(null);
   const [updatingLecturer, setUpdatingLecturer] = useState<string | null>(null);
@@ -85,12 +92,37 @@ export default function AdminDashboard({
         return;
       }
 
-      setCreatedAdmin({ name: result.name, email: result.schoolEmail, password: result.password });
+      setCreatedAdmin({ name: result.name, email: result.schoolEmail, password: result.password, reset: false });
       setAdminName("");
     } catch (error) {
       setAdminMessage(error instanceof Error ? error.message : "Could not create admin.");
     } finally {
       setCreatingAdmin(false);
+    }
+  };
+
+  const handleResetAdminPassword = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setResettingAdmin(true);
+    setAdminMessage(null);
+    try {
+      const result = await resetAdminPassword(adminEmailForReset);
+      if (!result.ok) {
+        setAdminMessage(result.error);
+        return;
+      }
+
+      setCreatedAdmin({
+        name: result.name,
+        email: result.schoolEmail,
+        password: result.password,
+        reset: true,
+      });
+      setAdminEmailForReset("");
+    } catch (error) {
+      setAdminMessage(error instanceof Error ? error.message : "Could not reset the admin password.");
+    } finally {
+      setResettingAdmin(false);
     }
   };
 
@@ -185,7 +217,9 @@ export default function AdminDashboard({
             >
               <div className="flex items-start justify-between bg-navy px-6 py-5 text-white">
                 <div>
-                  <h2 id="created-admin-title" className="font-serif text-xl font-bold">Admin account created</h2>
+                  <h2 id="created-admin-title" className="font-serif text-xl font-bold">
+                    {createdAdmin.reset ? "Admin password reset" : "Admin account created"}
+                  </h2>
                   <p className="mt-1 text-sm text-white/75">Share these temporary credentials securely.</p>
                 </div>
                 <button
@@ -288,8 +322,31 @@ export default function AdminDashboard({
               >
                 {creatingAdmin ? "Creating..." : "Create New Admin"}
               </button>
-              {adminMessage && <p role="status" className="text-sm text-red-700">{adminMessage}</p>}
             </form>
+
+            <form onSubmit={handleResetAdminPassword} className="space-y-4 rounded-lg border border-gray-200 p-5 lg:col-start-2">
+              <h3 className="font-heading text-base font-bold text-navy">Reset Admin Password</h3>
+              <p className="text-sm text-gray-600">Issue a fresh temporary password for an existing Jaligos admin account.</p>
+              <label className="block text-sm font-semibold text-navy">
+                Admin Email
+                <input
+                  type="email"
+                  required
+                  value={adminEmailForReset}
+                  onChange={(event) => setAdminEmailForReset(event.target.value)}
+                  className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
+                  placeholder="firstname.surname@jaligos.co.za"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={resettingAdmin}
+                className="rounded border border-action px-5 py-2.5 font-bold text-action transition hover:bg-action hover:text-white disabled:opacity-50"
+              >
+                {resettingAdmin ? "Resetting..." : "Generate New Temporary Password"}
+              </button>
+            </form>
+            {adminMessage && <p role="alert" className="text-sm text-red-700 lg:col-span-2">{adminMessage}</p>}
           </div>
           {staffMessage && <p role="status" className="px-6 pb-5 text-sm text-navy">{staffMessage}</p>}
           <div className="overflow-x-auto border-t">

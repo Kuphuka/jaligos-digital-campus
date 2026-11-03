@@ -209,6 +209,53 @@ export async function createAdmin(
   }
 }
 
+export async function resetAdminPassword(
+  email: string
+): Promise<Result<{ schoolEmail: string; password: string; name: string }>> {
+  await requireRole(["admin"]);
+  const normalizedEmail = email.trim().toLowerCase();
+  if (!/^[^@\s]+@jaligos\.co\.za$/i.test(normalizedEmail)) {
+    return { ok: false, error: "Enter a valid @jaligos.co.za admin email address." };
+  }
+
+  const admin = createAdminClient();
+  const escapedEmail = normalizedEmail.replace(/[\\%_]/g, "\\$&");
+  const { data: role, error: roleError } = await admin
+    .from("user_roles")
+    .select("id,email,full_name")
+    .ilike("email", escapedEmail)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (roleError) return { ok: false, error: `Could not verify the admin account: ${roleError.message}` };
+  if (!role?.email) return { ok: false, error: "No admin account was found for that email." };
+
+  let authUser = null;
+  const { data: linkedUser } = await admin.auth.admin.getUserById(String(role.id));
+  if (linkedUser.user?.email?.toLowerCase() === normalizedEmail) {
+    authUser = linkedUser.user;
+  } else {
+    for (let page = 1; page <= 100; page++) {
+      const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
+      if (error) return { ok: false, error: `Could not find the admin's login account: ${error.message}` };
+      authUser = data.users.find((user) => user.email?.toLowerCase() === normalizedEmail) ?? null;
+      if (authUser || data.users.length < 1000) break;
+    }
+  }
+  if (!authUser) return { ok: false, error: "The admin role exists, but its Supabase Auth account could not be found." };
+
+  const password = tempPassword();
+  const { error: updateError } = await admin.auth.admin.updateUserById(authUser.id, { password });
+  if (updateError) return { ok: false, error: `Could not reset the admin password: ${updateError.message}` };
+
+  revalidatePath("/admin");
+  return {
+    ok: true,
+    schoolEmail: normalizedEmail,
+    password,
+    name: (role.full_name as string | null) ?? "Admin",
+  };
+}
+
 export async function setLecturerStatus(
   email: string,
   status: "active" | "suspended"
