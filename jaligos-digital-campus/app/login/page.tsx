@@ -8,6 +8,7 @@ import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 import { homeFor } from "@/lib/roles";
 import { schoolContacts, schoolEmail } from "@/lib/contact";
+import { getSignedInRole } from "./actions";
 
 const field =
   "w-full rounded border border-gray-300 px-4 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -44,27 +45,31 @@ export default function Login() {
       return;
     }
 
-    const { data: roleRow } = await supabase
-      .from("user_roles")
-      .select("role,status")
-      .eq("email", (data.user.email ?? "").toLowerCase())
-      .maybeSingle();
+    const roleResult = await getSignedInRole();
 
-    if (!roleRow) {
+    if (!roleResult.ok) {
       await supabase.auth.signOut();
-      setError("Your account has no role assigned yet. Please contact the administrator.");
+      setError(roleResult.error);
       setLoading(false);
       return;
     }
 
-    if (roleRow.status === "suspended") {
+    if (roleResult.status === "suspended") {
       await supabase.auth.signOut();
       setError("Your account is suspended. Please contact the administrator.");
       setLoading(false);
       return;
     }
 
-    router.push(homeFor(roleRow.role));
+    const destination = homeFor(roleResult.role);
+    if (destination === "/login") {
+      await supabase.auth.signOut();
+      setError("Your account has an invalid role. Please contact the administrator.");
+      setLoading(false);
+      return;
+    }
+
+    router.push(destination);
     router.refresh();
   }
 

@@ -44,14 +44,22 @@ export async function middleware(request: NextRequest) {
   }
 
   // If there is a user, check their role for specific routes
-  if (user) {
-    const { data: roleData } = await supabase
+  if (user?.email) {
+    const escapedEmail = user.email.toLowerCase().replace(/[\\%_]/g, "\\$&")
+    const { data: idMatch } = await supabase
       .from('user_roles')
       .select('role')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
+    const { data: emailMatch } = idMatch?.role
+      ? { data: null }
+      : await supabase
+        .from('user_roles')
+        .select('role')
+        .ilike('email', escapedEmail)
+        .maybeSingle()
 
-    const role = roleData?.role
+    const role = idMatch?.role ?? emailMatch?.role
 
     // Protect Admin routes
     if (request.nextUrl.pathname.startsWith('/admin') && role !== 'admin') {

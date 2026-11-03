@@ -9,11 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: "#14263D",
-        "navy-light": "#243C5B",
-        gold: "#C2A36B",
-        "gold-dark": "#8B7146",
-        action: "#14263D",
+        navy: "#28346F",
+        "navy-light": "#3B4A83",
+        gold: "#FFC13D",
+        "gold-dark": "#E2A51D",
+        action: "#28346F",
       },
       fontFamily: {
         heading: ["Montserrat", "sans-serif"],

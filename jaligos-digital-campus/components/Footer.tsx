@@ -5,7 +5,7 @@ import { schoolContacts, schoolEmail } from "@/lib/contact";
 
 export default function Footer() {
   return (
-    <footer className="border-t-4 border-gold bg-[#0B1E35] text-slate-200">
+    <footer className="border-t-4 border-gold bg-navy text-slate-200">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1.2fr] lg:gap-16 lg:py-20">
         <div>
           <Logo dark />

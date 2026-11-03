@@ -1,4 +1,5 @@
 import { createClient } from './supabase/server';
+import { findUserRole } from './user-role';
 
 export async function getCurrentUser() {
   const supabase = await createClient();
@@ -9,21 +10,17 @@ export async function getCurrentUser() {
 
   if (!user?.email) return null;
 
-  const email = user.email.toLowerCase();
-  
-  const { data: roleData } = await supabase
-    .from('user_roles')
-    .select('*')
-    .eq('email', email)
-    .single();
+  const email = user.email.trim().toLowerCase();
+  const roleData = await findUserRole(user.id, email);
+  if (!roleData) return null;
 
   return {
     user,
-    role: roleData?.role || 'student',
-    status: roleData?.status || 'active',
+    role: roleData.role,
+    status: roleData.status || 'active',
     profile: roleData,
-    email: email, // Added for easy access
-    fullName: roleData?.full_name || 'Student', // Added for easy access
+    email,
+    fullName: roleData.full_name || 'Student',
   };
 }
 

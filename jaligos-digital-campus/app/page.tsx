@@ -41,17 +41,17 @@ export default function Home() {
       <main>
         <section className="relative isolate flex min-h-[640px] items-center overflow-hidden bg-navy sm:min-h-[700px] lg:min-h-[760px]">
           <Image
-            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2200&q=90"
-            alt="Graduates celebrating together after completing their studies"
+            src="/jaligos-training-hero.jpeg"
+            alt="Jaligos trainees wearing safety equipment at a construction training site"
             fill
             priority
             sizes="100vw"
             className="z-0 object-cover object-center"
           />
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#08182B]/95 via-[#14263D]/80 to-[#14263D]/30" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#08182B]/55 via-transparent to-[#08182B]/10" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/30" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-navy/55 via-transparent to-navy/10" />
 
-          <div className="relative z-20 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 pb-24 pt-20 sm:px-10 lg:grid-cols-[1.2fr_0.8fr] lg:px-12 lg:py-28">
+          <div className="relative z-20 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 pb-24 pt-20 sm:px-10 lg:grid-cols-1 lg:px-12 lg:py-28">
             <div className="max-w-3xl">
               <p className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.24em] text-white/90 sm:text-sm">
                 <span className="h-px w-9 bg-gold" />
@@ -83,21 +83,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden justify-end lg:flex">
-              <div className="w-full max-w-sm border border-white/30 bg-[#08182B]/70 p-7 text-white shadow-2xl backdrop-blur-md">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/65">Jaligos · 2026 intake</p>
-                <p className="mt-4 font-serif text-3xl font-bold leading-tight">Training for safer workplaces and stronger communities.</p>
-                <div className="mt-7 border-t border-white/20 pt-5">
-                  <p className="text-sm leading-6 text-white/75">Applications are open for our 2026 programmes across four branches.</p>
-                  <Link href="/register" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-white hover:text-gold">
-                    Find your course <ArrowRight size={16} />
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 z-20 border-t border-white/15 bg-[#08182B]/70 backdrop-blur-sm">
+          <div className="absolute inset-x-0 bottom-0 z-20 border-t border-white/15 bg-navy/70 backdrop-blur-sm">
             <div className="mx-auto grid max-w-7xl grid-cols-3 divide-x divide-white/15 px-3 sm:px-10 lg:px-12">
               {facts.map((fact) => (
                 <div key={fact.label} className="flex flex-col items-start gap-1 px-3 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6 sm:py-5 first:sm:pl-0">

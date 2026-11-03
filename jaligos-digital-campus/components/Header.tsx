@@ -19,18 +19,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50">
       {/* Top bar */}
-      <div className="bg-navy text-xs text-white/80">
+      <div className="bg-gold text-xs text-navy">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-2 sm:justify-between">
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <a href={`tel:${schoolContacts[0].tel}`} className="inline-flex items-center gap-1.5 font-semibold text-white hover:text-gold">
+            <a href={`tel:${schoolContacts[0].tel}`} className="inline-flex items-center gap-1.5 font-semibold text-navy hover:text-navy-light">
               <Phone size={13} /> {schoolContacts[0].number}
             </a>
-            <a href={`mailto:${schoolEmail}`} className="inline-flex min-w-0 items-center gap-1.5 break-all text-white/85 hover:text-white sm:break-normal">
+            <a href={`mailto:${schoolEmail}`} className="inline-flex min-w-0 items-center gap-1.5 break-all text-navy/85 hover:text-navy-light sm:break-normal">
               <Mail size={13} /> {schoolEmail}
             </a>
           </div>
-          <div className="hidden items-center gap-2 text-white/80 md:flex">
-            <MapPin size={13} className="text-gold" />
+          <div className="hidden items-center gap-2 text-navy/80 md:flex">
+            <MapPin size={13} className="text-navy" />
             <span>Johannesburg · Sebokeng · QwaQwa · Limpopo</span>
           </div>
         </div>

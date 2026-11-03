@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import Logo from "@/components/Logo";
 import { createClient } from "@/lib/supabase/client";
 import { homeFor } from "@/lib/roles";
+import { getSignedInRole } from "@/app/login/actions";
 
 const field =
   "w-full rounded border border-gray-300 px-4 py-2.5 text-sm focus:border-navy focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -32,16 +33,14 @@ export default function ChangePassword() {
       return;
     }
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const { data: roleRow } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("email", (user?.email ?? "").toLowerCase())
-      .maybeSingle();
+    const roleResult = await getSignedInRole();
+    if (!roleResult.ok) {
+      setError(roleResult.error);
+      setSaving(false);
+      return;
+    }
 
-    router.push(homeFor(roleRow?.role));
+    router.push(homeFor(roleResult.role));
     router.refresh();
   }
 
