@@ -18,7 +18,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -73,6 +75,29 @@ export default function Login() {
     router.refresh();
   }
 
+  async function sendPasswordReset() {
+    setError(null);
+    setNotice(null);
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      setError("Enter your email address first, then select Forgot Password.");
+      return;
+    }
+
+    setSendingReset(true);
+    const supabase = createClient();
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo: `${window.location.origin}/change-password`,
+    });
+    setSendingReset(false);
+
+    if (resetError) {
+      setError(resetError.message);
+      return;
+    }
+    setNotice("If an account exists for that email, a password reset link has been sent.");
+  }
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F5F3EE] px-4">
       <div className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-lg">
@@ -102,7 +127,16 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className={field}
             />
+            <button
+              type="button"
+              onClick={sendPasswordReset}
+              disabled={sendingReset}
+              className="mt-2 text-sm font-semibold text-action underline decoration-gold underline-offset-2 hover:text-gold-dark disabled:opacity-60"
+            >
+              {sendingReset ? "Sending reset link..." : "Forgot Password?"}
+            </button>
           </div>
+          {notice && <p role="status" className="rounded bg-green-50 px-3 py-2 text-sm text-green-700">{notice}</p>}
           <button
             type="submit"
             disabled={loading}

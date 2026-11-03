@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ChangePasswordModal from "@/components/ChangePasswordModal";
 import { createClient } from "@/lib/supabase/client";
 
 interface PortalShellProps {
@@ -14,6 +16,7 @@ interface PortalShellProps {
 export default function PortalShell({ children, profile, title, subtitle }: PortalShellProps) {
   const router = useRouter();
   const supabase = createClient();
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   
   const nameToUse = profile?.full_name || profile?.name || profile?.email || "User";
   const initials = nameToUse
@@ -46,6 +49,13 @@ export default function PortalShell({ children, profile, title, subtitle }: Port
           <div className="w-10 h-10 rounded-full bg-gold text-navy flex items-center justify-center font-heading font-bold text-sm shadow-lg">
             {initials}
           </div>
+          <button
+            type="button"
+            onClick={() => setPasswordModalOpen(true)}
+            className="text-sm font-heading font-semibold text-gray-300 hover:text-gold transition-colors duration-300"
+          >
+            Change Password
+          </button>
           <button onClick={handleLogout} className="text-sm font-heading font-semibold text-gray-300 hover:text-gold transition-colors duration-300">
             Log Out
           </button>
@@ -56,6 +66,7 @@ export default function PortalShell({ children, profile, title, subtitle }: Port
       <main className="flex-grow p-8 max-w-7xl mx-auto w-full">
         {children}
       </main>
+      {passwordModalOpen && <ChangePasswordModal onClose={() => setPasswordModalOpen(false)} />}
     </div>
   );
 }

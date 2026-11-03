@@ -178,6 +178,37 @@ export async function createLecturer(
   }
 }
 
+export async function createAdmin(
+  fullName: string
+): Promise<Result<{ schoolEmail: string; password: string; name: string }>> {
+  await requireRole(["admin"]);
+
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length < 2) return { ok: false, error: "Enter the first name and surname." };
+  const name = parts.join(" ");
+  const base = `${clean(parts[0])}.${clean(parts[parts.length - 1])}`;
+  if (base.length < 3) return { ok: false, error: "That name is not valid for an email address." };
+
+  const admin = createAdminClient();
+  try {
+    const acc = await createAccount(admin, base, name);
+    const roleError = await insertRole(admin, acc.userId, {
+      email: acc.email,
+      role: "admin",
+      full_name: name,
+    });
+    if (roleError) {
+      await rollback(admin, acc.userId, acc.email);
+      return { ok: false, error: `Could not save the admin role: ${roleError}` };
+    }
+
+    revalidatePath("/admin");
+    return { ok: true, schoolEmail: acc.email, password: acc.password, name };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : "Could not create admin." };
+  }
+}
+
 export async function setLecturerStatus(
   email: string,
   status: "active" | "suspended"

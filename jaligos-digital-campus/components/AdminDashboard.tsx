@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Copy, X } from "lucide-react";
 import PortalShell from "./PortalShell";
-import { approveApplication, createLecturer, releaseResult, setLecturerStatus } from "@/app/admin/actions";
+import { approveApplication, createAdmin, createLecturer, releaseResult, setLecturerStatus } from "@/app/admin/actions";
 
 export type PendingApplication = {
   id: string;
@@ -42,6 +43,11 @@ export default function AdminDashboard({
   const [lecturerName, setLecturerName] = useState("");
   const [courseId, setCourseId] = useState("");
   const [creatingLecturer, setCreatingLecturer] = useState(false);
+  const [adminName, setAdminName] = useState("");
+  const [creatingAdmin, setCreatingAdmin] = useState(false);
+  const [adminMessage, setAdminMessage] = useState<string | null>(null);
+  const [createdAdmin, setCreatedAdmin] = useState<{ name: string; email: string; password: string } | null>(null);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [staffMessage, setStaffMessage] = useState<string | null>(null);
   const [updatingLecturer, setUpdatingLecturer] = useState<string | null>(null);
 
@@ -65,6 +71,38 @@ export default function AdminDashboard({
       setStaffMessage(error instanceof Error ? error.message : "Could not create lecturer.");
     } finally {
       setCreatingLecturer(false);
+    }
+  };
+
+  const handleCreateAdmin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCreatingAdmin(true);
+    setAdminMessage(null);
+    try {
+      const result = await createAdmin(adminName);
+      if (!result.ok) {
+        setAdminMessage(result.error);
+        return;
+      }
+
+      setCreatedAdmin({ name: result.name, email: result.schoolEmail, password: result.password });
+      setAdminName("");
+    } catch (error) {
+      setAdminMessage(error instanceof Error ? error.message : "Could not create admin.");
+    } finally {
+      setCreatingAdmin(false);
+    }
+  };
+
+  const copyAdminCredentials = async () => {
+    if (!createdAdmin) return;
+    try {
+      await navigator.clipboard.writeText(
+        `Name: ${createdAdmin.name}\nEmail: ${createdAdmin.email}\nTemporary password: ${createdAdmin.password}`
+      );
+      setCopyMessage("Credentials copied.");
+    } catch {
+      setCopyMessage("Copy was unavailable. Select and copy the credentials above.");
     }
   };
 
@@ -137,43 +175,122 @@ export default function AdminDashboard({
       profile={{ full_name: profile.name, email: profile.email, role: "admin" }}
     >
       <div className="max-w-7xl mx-auto space-y-6">
+        {createdAdmin && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#08182B]/70 px-4 py-8">
+            <section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="created-admin-title"
+              className="w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl"
+            >
+              <div className="flex items-start justify-between bg-navy px-6 py-5 text-white">
+                <div>
+                  <h2 id="created-admin-title" className="font-serif text-xl font-bold">Admin account created</h2>
+                  <p className="mt-1 text-sm text-white/75">Share these temporary credentials securely.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setCreatedAdmin(null); setCopyMessage(null); }}
+                  aria-label="Close admin credentials"
+                  className="rounded p-1 text-white/75 transition hover:bg-white/10 hover:text-white"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="space-y-4 p-6">
+                <p className="text-sm font-semibold text-navy">{createdAdmin.name}</p>
+                <label className="block text-sm font-semibold text-navy">
+                  Email
+                  <input readOnly value={createdAdmin.email} className="mt-1 w-full rounded border border-gray-300 bg-gray-50 px-4 py-2.5 font-normal text-slate-700" />
+                </label>
+                <label className="block text-sm font-semibold text-navy">
+                  Temporary password
+                  <input readOnly value={createdAdmin.password} className="mt-1 w-full rounded border border-gray-300 bg-gray-50 px-4 py-2.5 font-mono font-normal text-slate-700" />
+                </label>
+                {copyMessage && <p role="status" className="text-sm text-navy">{copyMessage}</p>}
+                <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => { setCreatedAdmin(null); setCopyMessage(null); }}
+                    className="rounded border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Done
+                  </button>
+                  <button
+                    type="button"
+                    onClick={copyAdminCredentials}
+                    className="inline-flex items-center justify-center gap-2 rounded bg-action px-5 py-2.5 text-sm font-bold text-white transition hover:bg-gold-dark"
+                  >
+                    <Copy size={16} /> Copy Credentials
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        )}
         <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="border-b border-gray-200 px-6 py-4">
             <h2 className="font-serif text-xl font-bold text-navy">Staff Management</h2>
             <p className="mt-1 text-sm text-gray-500">Create lecturer accounts, assign courses, and manage access.</p>
           </div>
-          <form onSubmit={handleCreateLecturer} className="grid gap-4 p-6 md:grid-cols-[1fr_1fr_auto] md:items-end">
-            <label className="block text-sm font-semibold text-navy">
-              Lecturer Full Name
-              <input
-                required
-                minLength={3}
-                value={lecturerName}
-                onChange={(event) => setLecturerName(event.target.value)}
-                className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
-                placeholder="First name and surname"
-              />
-            </label>
-            <label className="block text-sm font-semibold text-navy">
-              Assigned Course
-              <select
-                required
-                value={courseId}
-                onChange={(event) => setCourseId(event.target.value)}
-                className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
+          <div className="grid gap-6 p-6 lg:grid-cols-2">
+            <form onSubmit={handleCreateLecturer} className="space-y-4 rounded-lg border border-gray-200 p-5">
+              <h3 className="font-heading text-base font-bold text-navy">Create Lecturer</h3>
+              <label className="block text-sm font-semibold text-navy">
+                Lecturer Full Name
+                <input
+                  required
+                  minLength={3}
+                  value={lecturerName}
+                  onChange={(event) => setLecturerName(event.target.value)}
+                  className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
+                  placeholder="First name and surname"
+                />
+              </label>
+              <label className="block text-sm font-semibold text-navy">
+                Assigned Course
+                <select
+                  required
+                  value={courseId}
+                  onChange={(event) => setCourseId(event.target.value)}
+                  className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
+                >
+                  <option value="">Select a course</option>
+                  {courses.map((course) => <option key={course.id} value={course.id}>{course.title}</option>)}
+                </select>
+              </label>
+              <button
+                type="submit"
+                disabled={creatingLecturer || courses.length === 0}
+                className="rounded bg-action px-5 py-2.5 font-bold text-white transition hover:bg-gold-dark disabled:opacity-50"
               >
-                <option value="">Select a course</option>
-                {courses.map((course) => <option key={course.id} value={course.id}>{course.title}</option>)}
-              </select>
-            </label>
-            <button
-              type="submit"
-              disabled={creatingLecturer || courses.length === 0}
-              className="rounded bg-action px-5 py-2.5 font-bold text-white transition hover:bg-gold-dark disabled:opacity-50"
-            >
-              {creatingLecturer ? "Creating..." : "Create Lecturer"}
-            </button>
-          </form>
+                {creatingLecturer ? "Creating..." : "Create Lecturer"}
+              </button>
+            </form>
+
+            <form onSubmit={handleCreateAdmin} className="space-y-4 rounded-lg border border-gold/40 bg-[#F5F3EE]/60 p-5">
+              <h3 className="font-heading text-base font-bold text-navy">Create New Admin</h3>
+              <label className="block text-sm font-semibold text-navy">
+                Full Name
+                <input
+                  required
+                  minLength={3}
+                  value={adminName}
+                  onChange={(event) => setAdminName(event.target.value)}
+                  className="mt-1 w-full rounded border border-gray-300 px-4 py-2.5 font-normal"
+                  placeholder="First name and surname"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={creatingAdmin}
+                className="rounded bg-action px-5 py-2.5 font-bold text-white transition hover:bg-gold-dark disabled:opacity-50"
+              >
+                {creatingAdmin ? "Creating..." : "Create New Admin"}
+              </button>
+              {adminMessage && <p role="status" className="text-sm text-red-700">{adminMessage}</p>}
+            </form>
+          </div>
           {staffMessage && <p role="status" className="px-6 pb-5 text-sm text-navy">{staffMessage}</p>}
           <div className="overflow-x-auto border-t">
             <table className="w-full min-w-[700px] text-left text-sm">
