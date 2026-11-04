@@ -3,6 +3,7 @@
 import { randomInt } from "crypto";
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
+import { sendStudentWelcomeEmail } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Result } from "@/lib/result";
 
@@ -58,7 +59,14 @@ async function rollback(admin: Admin, userId: string, email: string) {
 
 export async function approveApplication(
   applicationId: string
-): Promise<Result<{ schoolEmail: string; password: string; name: string }>> {
+): Promise<Result<{
+  schoolEmail: string;
+  password: string;
+  name: string;
+  personalEmail: string;
+  welcomeEmailSent: boolean;
+  welcomeEmailError?: string;
+}>> {
   const me = await requireRole(["admin"]);
   if (!me) return { ok: false, error: "Not allowed." };
 
@@ -91,13 +99,48 @@ export async function approveApplication(
       return { ok: false, error: `Could not save the enrollment: ${enrolError.message}` };
     }
 
+    const { data: course, error: courseError } = await admin
+      .from("courses")
+      .select("title")
+      .eq("id", app.course_id)
+      .maybeSingle();
+    if (courseError || !course) {
+      return {
+        ok: false,
+        error: `Student account and enrollment were created, but the course name could not be loaded: ${courseError?.message ?? "Course not found."}`,
+      };
+    }
+
     const { error: statusError } = await admin.from("applications").update({ status: "approved" }).eq("id", app.id);
     if (statusError) {
       return { ok: false, error: `Account created (${acc.email}) but the application status was not updated: ${statusError.message}` };
     }
 
+    let welcomeEmailSent = false;
+    let welcomeEmailError: string | undefined;
+    try {
+      await sendStudentWelcomeEmail(
+        app.email,
+        acc.email,
+        acc.password,
+        fullName,
+        course.title
+      );
+      welcomeEmailSent = true;
+    } catch (error) {
+      welcomeEmailError = error instanceof Error ? error.message : "The welcome email could not be sent.";
+    }
+
     revalidatePath("/admin");
-    return { ok: true, schoolEmail: acc.email, password: acc.password, name: fullName };
+    return {
+      ok: true,
+      schoolEmail: acc.email,
+      password: acc.password,
+      name: fullName,
+      personalEmail: app.email,
+      welcomeEmailSent,
+      ...(welcomeEmailError ? { welcomeEmailError } : {}),
+    };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Something went wrong." };
   }

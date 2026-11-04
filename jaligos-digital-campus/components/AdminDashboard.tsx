@@ -167,10 +167,12 @@ export default function AdminDashboard({
       if (result && !result.ok) {
         alert("Error approving student: " + result.error);
       } else if (result && result.ok) {
-        // USING PROMPT INSTEAD OF ALERT SO YOU CAN COPY THE TEXT
+        const emailStatus = result.welcomeEmailSent
+          ? `Success! The student account was created AND a welcome email was sent to their personal address (${result.personalEmail}).`
+          : `The student account was created, but the welcome email could not be sent to ${result.personalEmail}: ${result.welcomeEmailError ?? "Unknown email delivery error."}`;
         prompt(
-          "Success! Copy these details for the student:", 
-          `Email: ${result.schoolEmail} | Password: ${result.password}`
+          emailStatus,
+          `Login email: ${result.schoolEmail}\nTemporary password: ${result.password}`
         );
         
         // Remove them from the table
