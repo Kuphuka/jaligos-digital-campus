@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Open_Sans } from "next/font/google";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import PromoBanner from "@/components/PromoBanner";
+import ChatBot from "@/components/ChatBot";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PromoBanner compact />
         {children}
         <WhatsAppButton />
+        <ChatBot />
       </body>
     </html>
   );
