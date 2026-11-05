@@ -15,9 +15,38 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Jaligos Digital Campus",
+  metadataBase: new URL("https://jaligostraining.co.za"),
+  title: {
+    default: "Jaligos Training and Skills Development Centre",
+    template: "%s | Jaligos Training and Skills Development Centre",
+  },
   description:
-    "Jaligos Training and Skills Development Centre — accredited safety, home based care and compliance courses.",
+    "Jaligos Training and Skills Development Centre offers accredited safety, compliance, and home based care courses in South Africa.",
+  keywords: [
+    "SHEMTRAC",
+    "Caregiver course",
+    "safety training",
+    "Jaligos",
+    "accredited courses South Africa",
+    "home based care courses",
+    "compliance training",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Jaligos Training and Skills Development Centre",
+    url: "https://jaligostraining.co.za",
+    title: "Jaligos Training and Skills Development Centre",
+    description:
+      "Accredited safety, compliance, and home based care courses in South Africa.",
+    images: [
+      {
+        url: "/jaligos-training-hero.jpeg",
+        width: 1170,
+        height: 905,
+        alt: "Jaligos trainees wearing safety equipment at a construction training site",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
